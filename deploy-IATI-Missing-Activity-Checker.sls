@@ -19,5 +19,5 @@ cd /home/missingactivities/ && ./run.sh > /home/missingactivities/logs/log.log:
   cron.present:
     - identifier: IATI-Missing-Activity-Checker
     - user: root
-    - minute: 21
-    - hour: 16
+    - minute: 0
+    - hour: 0
