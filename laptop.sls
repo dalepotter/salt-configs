@@ -9,6 +9,8 @@
 # N.B. May take some time to run
 
 
+## General software
+
 laptop_software:
   pkg:
     - installed
@@ -18,7 +20,9 @@ laptop_software:
       - gedit
       - chromium-browser
 
-# Coding tools
+
+## Coding tools
+
 atom-ppa:
   pkgrepo.managed:
     - ppa: webupd8team/atom
@@ -41,6 +45,9 @@ sublime-text-installer:
   pkg:
     - installed
 
+
+## Media
+
 # Gmusicbrowser
 gmusicbrowser-ppa:
   pkgrepo.managed:
@@ -50,6 +57,18 @@ gmusicbrowser-ppa:
     - refresh: True
 
 gmusicbrowser:
+  pkg:
+    - installed
+
+# VLC media player
+vlc-ppa:
+  pkgrepo.managed:
+    - ppa: videolan/stable-daily
+  pkg.latest:
+    - name: vlc
+    - refresh: True
+
+vlc:
   pkg:
     - installed
 
