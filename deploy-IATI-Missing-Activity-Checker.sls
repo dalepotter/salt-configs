@@ -15,7 +15,7 @@ https://github.com/IATI/IATI-Missing-Activity-Checker.git:
   file.directory:
     - makedirs: True
 
-cd /home/missingactivities/ && ./run.sh > /home/missingactivities/logs/log.log:
+cd /home/missingactivities/ && ./run.sh > /home/missingactivities/logs/$(date +\%Y\%m\%d)-log.log:
   cron.present:
     - identifier: IATI-Missing-Activity-Checker
     - user: root
