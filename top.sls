@@ -4,5 +4,7 @@ base:
     - webserver
     - text-editors
     - git
-  'webserver12':
+
+  'IATI-Dummy,webserver12':
+    - match: list
     - deploy-IATI-Missing-Activity-Checker
