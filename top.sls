@@ -1,8 +1,6 @@
 base:
   '*':
-    - timezone-london
-    - webserver
-    - text-editors
+    - basic
     - git
 
   'IATI-Dummy,webserver12':
