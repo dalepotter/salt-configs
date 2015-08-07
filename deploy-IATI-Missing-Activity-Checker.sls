@@ -3,7 +3,7 @@ https://github.com/IATI/IATI-Missing-Activity-Checker.git:
     - rev: master
     - target: /home/missingactivities/
   require:
-    - git
+    - pkg: git
 
 /home/missingactivities/run.sh:
   file.managed:
