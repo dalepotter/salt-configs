@@ -6,6 +6,11 @@
 #   unix-user-name: dashboard
 #   unix-user-home-directory: /home/dashboard
 
+
+###########################
+# General Server set-up #
+###########################
+
 include:
   - base
   - IATI-Registry-Refresher.deploy-IATI-Registry-Refresher
@@ -25,12 +30,12 @@ include:
 # Server - for https://github.com/idsdata/IATI-Urls-Snapshot
 git config --global user.name "Dashboard":
   cmd.run:
-    - user: dashboard
+    - user: {{ pillar['dashboard']['unix-user-name'] }}
 
 # Server - for https://github.com/idsdata/IATI-Urls-Snapshot
 git config --global user.email "code@iatistandard.org":
   cmd.run:
-    - user: dashboard
+    - user: {{ pillar['dashboard']['unix-user-name'] }}
 
 # Server
 /usr/bin/gist:
@@ -40,16 +45,16 @@ git config --global user.email "code@iatistandard.org":
 # Server - for https://github.com/idsdata/IATI-Urls-Snapshot
 /home/dashboard/.netrc:
   file.managed:
-    - source: salt://dashboard-netrc
-    - user: dashboard
+    - source: salt://iati/dashboard-netrc
+    - user: {{ pillar['dashboard']['unix-user-name'] }}
     - template: jinja
 
 # Server - for https://github.com/idsdata/IATI-Urls-Snapshot
 https://github.com/idsdata/IATI-Urls-Snapshot.git:
   git.latest:
     - rev: master
-    - target: /home/dashboard/IATI-Registry-Refresher/urls
-    - user: dashboard
+    - target: {{ pillar['dashboard']['unix-user-home-directory'] }}/IATI-Registry-Refresher/urls
+    - user: {{ pillar['dashboard']['unix-user-name'] }}
 
 
 ##############
@@ -62,106 +67,52 @@ https://github.com/idsdata/IATI-Urls-Snapshot.git:
 # IATI-Dashboard #
 ##################
 
-# Tool
-https://github.com/IATI/IATI-Dashboard.git:
-  git.latest:
-{% if saltenv == 'dev' %}
-    - rev: master
-{% else %}
-    - rev: live 
-{% endif %}
-    - target: /home/dashboard/IATI-Dashboard
-    - user: dashboard
 
-# Tool
-dashboard-deps:
-    pkg.installed:
-        - pkgs:
-            - libfreetype6-dev
-            - libpng12-dev
-            - pkg-config
-
-# Tool
-/home/dashboard/IATI-Dashboard/pyenv/:
-    virtualenv.managed:
-        - system_site_packages: False
-        - requirements: /home/dashboard/IATI-Dashboard/requirements.txt
-        - require:
-            - pkg: stats-deps
-            - pkg: dashboard-deps
-
-# Tool
-/home/dashboard/IATI-Dashboard/config.py:
-    file.managed:
-        - source: salt://dashboard-config.py
-        - user: dashboard
-        - template: jinja
 
 # Server
-/home/dashboard/IATI-Stats/data:
+{{ pillar['dashboard']['unix-user-home-directory'] }}/IATI-Stats/data:
   file.symlink:
-    - target: /home/dashboard/IATI-Registry-Refresher/data
-    - user: dashboard
+    - target: {{ pillar['dashboard']['unix-user-home-directory'] }}/IATI-Registry-Refresher/data
+    - user: {{ pillar['dashboard']['unix-user-name'] }}
 
 # Server
-/home/dashboard/IATI-Stats/helpers/ckan:
+{{ pillar['dashboard']['unix-user-home-directory'] }}/IATI-Stats/helpers/ckan:
   file.symlink:
-    - target: /home/dashboard/IATI-Registry-Refresher/ckan
-    - user: dashboard
+    - target: {{ pillar['dashboard']['unix-user-home-directory'] }}/IATI-Registry-Refresher/data/IATI-Registry-Refresher/ckan
+    - user: {{ pillar['dashboard']['unix-user-name'] }}
 
 # Server
-/home/dashboard/IATI-Stats/helpers/get_schemas.sh:
-    cmd.run:
-        - cwd: /home/dashboard/IATI-Stats/helpers/
-
-# Server
-/home/dashboard/IATI-Stats/helpers/get_codelist_mapping.sh:
-    cmd.run:
-        - cwd: /home/dashboard/IATI-Stats/helpers/
-
-# Server
-/home/dashboard/IATI-Stats/helpers/get_codelists.sh:
-    cmd.run:
-        - cwd: /home/dashboard/IATI-Stats/helpers/
-
-# Server
-https://github.com/IATI/IATI-Rulesets.git:
-    git.latest:
-        - rev: version-1.05
-        - target: /home/dashboard/IATI-Stats/IATI-Rulesets/
-        - user: dashboard
-
-# Server
-/home/dashboard/IATI-Stats/helpers/rulesets:
+{{ pillar['dashboard']['unix-user-home-directory'] }}/IATI-Stats/helpers/rulesets:
     file.symlink:
-        - target: /home/dashboard/IATI-Stats/IATI-Rulesets/rulesets
+        - target: {{ pillar['dashboard']['unix-user-home-directory'] }}/IATI-Stats/IATI-Rulesets/rulesets
 
-# Server
-/home/dashboard/IATI-Dashboard/stats-calculated:
+# Server - Set-up link between the IATI-Stats output and the data that the IATI-Dashboard looks for to generate the stats
+{{ pillar['dashboard']['unix-user-home-directory'] }}/IATI-Dashboard/stats-calculated:
     file.symlink:
-        - target: /home/dashboard/IATI-Stats/gitout
+        - target: {{ pillar['dashboard']['unix-user-home-directory'] }}/IATI-Stats/gitout
 
 # Server
-/home/dashboard/IATI-Dashboard/stats-blacklist:
+{{ pillar['dashboard']['unix-user-home-directory'] }}/IATI-Dashboard/stats-blacklist:
     file.symlink:
-        - target: /home/dashboard/IATI-Stats/stats-blacklist
+        - target: {{ pillar['dashboard']['unix-user-home-directory'] }}/IATI-Stats/stats-blacklist
 
-# Server
+# Server - Install dependencies for running the Dashboard on a public webserver
 webserver-deps:
     pkg.installed:
         - pkgs:
             - apache2
 
+# Server - Configure the apache public webserver
 /etc/apache2/sites-available/new.dashboard.conf:
   file.managed:
-    - source: salt://dashboard-apache
+    - source: salt://iati/IATI-Dashboard/dashboard-apache
 
-# Server
+# Server - Set-up a symlink between sites-enabled and sites-available directories
 /etc/apache2/sites-enabled/new.dashboard.conf:
     file.symlink:
         - target: /etc/apache2/sites-available/new.dashboard.conf
 
-# Server
+# Server - Restart apache server if the configuration file changes
 apache2:
   service:
     - running
@@ -170,24 +121,28 @@ apache2:
     - watch:
       - file: /etc/apache2/sites-available/new.dashboard.conf
 
-# Server
-/home/dashboard/full-dashboard-run.sh:
+
+# Set the process to run nightly
+################################
+
+# Server - Install the script to generate the stats and Dashboard
+{{ pillar['dashboard']['unix-user-home-directory'] }}/full-dashboard-run.sh:
   file.managed:
-    - source: salt://full-dashboard-run.sh
-    - user: dashboard
+    - source: salt://iati/full-dashboard-run.sh
+    - user: {{ pillar['dashboard']['unix-user-name'] }}
     - mode: 755
 
-# Server
-/home/dashboard/logs:
+# Server - Set-up logging directories
+{{ pillar['dashboard']['unix-user-home-directory'] }}/logs:
   file.directory:
     - makedirs: True
-    - user: dashboard
-    - group: dashboard
+    - user: {{ pillar['dashboard']['unix-user-name'] }}
+    - group: {{ pillar['dashboard']['unix-user-name'] }}
 
-# Server
-/home/dashboard/full-dashboard-run.sh > /home/dashboard/logs/$(date +\%Y\%m\%d).log 2>&1:
+# Server - Set-up cron jobs to run the stats & dashboard generation every night
+{{ pillar['dashboard']['unix-user-home-directory'] }}/full-dashboard-run.sh > {{ pillar['dashboard']['unix-user-home-directory'] }}/logs/$(date +\%Y\%m\%d).log 2>&1:
   cron.present:
-    - user: dashboard
+    - user: {{ pillar['dashboard']['unix-user-name'] }}
     - minute: 1
 {% if saltenv == 'dev' %}
     - hour: 6
@@ -200,7 +155,7 @@ apache2:
 curl "http://iatiregistry.org/api/1/search/dataset?isopen=false&limit=200" | grep -o '"[^"]*"' | sed -e 's/"//g' -e 's/-.*//' | sort | uniq -c | gist -u 24beac7d23282f9b15f4 -f license_not_open:
   cron.present:
     - identifier: license-not-open-gist
-    - user: dashboard
+    - user: {{ pillar['dashboard']['unix-user-name'] }}
     - minute: 0
     - hour: 0
 {% endif %}

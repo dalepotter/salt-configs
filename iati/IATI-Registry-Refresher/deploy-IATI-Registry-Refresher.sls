@@ -19,7 +19,7 @@ registry-refresher-deps:
       - gist
       - zip
 
-# Tool
+# Clone git repo
 https://github.com/IATI/IATI-Registry-Refresher.git:
   git.latest:
 {% if saltenv == 'dev' %}
