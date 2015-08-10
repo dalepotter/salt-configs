@@ -27,7 +27,7 @@ https://github.com/IATI/IATI-Stats.git:
     - rev: live
 {% endif %}
     - target: {{ pillar['stats']['unix-user-home-directory'] }}/IATI-Stats
-    - user: {{ pillar['dashboard']['unix-user-name'] }}
+    - user: {{ pillar['stats']['unix-user-name'] }}
 
 # Set-up a vitrual environment
 {{ pillar['stats']['unix-user-home-directory'] }}/IATI-Stats/pyenv/:
@@ -36,3 +36,26 @@ https://github.com/IATI/IATI-Stats.git:
         - requirements: {{ pillar['stats']['unix-user-home-directory'] }}/IATI-Stats/requirements.txt
         - require:
             - pkg: stats-deps
+
+# Ensure the stats helpers are set-up: IATI Schemas
+{{ pillar['stats']['unix-user-home-directory'] }}/IATI-Stats/helpers/get_schemas.sh:
+    cmd.run:
+        - cwd: {{ pillar['stats']['unix-user-home-directory'] }}/IATI-Stats/helpers/
+
+# Ensure the stats helpers are set-up: IATI Codelist Mapping
+{{ pillar['stats']['unix-user-home-directory'] }}/IATI-Stats/helpers/get_codelist_mapping.sh:
+    cmd.run:
+        - cwd: {{ pillar['stats']['unix-user-home-directory'] }}/IATI-Stats/helpers/
+
+# Ensure the stats helpers are set-up: Codelists
+{{ pillar['stats']['unix-user-home-directory'] }}/IATI-Stats/helpers/get_codelists.sh:
+    cmd.run:
+        - cwd: {{ pillar['stats']['unix-user-home-directory'] }}/IATI-Stats/helpers/
+
+# Ensure the stats helpers are set-up: IATI Rulesets
+https://github.com/IATI/IATI-Rulesets.git:
+    git.latest:
+        - rev: version-1.05
+        - target: {{ pillar['stats']['unix-user-home-directory'] }}/IATI-Stats/IATI-Rulesets/
+        - user: {{ pillar['stats']['unix-user-name'] }}
+
