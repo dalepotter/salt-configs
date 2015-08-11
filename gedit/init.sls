@@ -1,0 +1,3 @@
+gedit:
+  pkg:
+    - installed

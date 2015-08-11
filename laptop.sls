@@ -7,75 +7,13 @@
 # N.B. May take some time to run
 
 
-## General software
-
-laptop_software:
-  pkg:
-    - installed
-    - pkgs:
-      - python-software-properties
-      - libreoffice
-      - gedit
-      - chromium-browser
-
-
-## Coding tools
-
-atom-ppa:
-  pkgrepo.managed:
-    - ppa: webupd8team/atom
-  pkg.latest:
-    - name: atom
-    - refresh: True
-
-atom:
-  pkg:
-    - installed
-
-sublime3-ppa:
-  pkgrepo.managed:
-    - ppa: webupd8team/sublime-text-3
-  pkg.latest:
-    - name: sublime3
-    - refresh: True
-
-sublime-text-installer:
-  pkg:
-    - installed
-
-
-## Media
-
-# Gmusicbrowser
-gmusicbrowser-ppa:
-  pkgrepo.managed:
-    - ppa: andreas-boettger/gmusicbrowser-daily
-  pkg.latest:
-    - name: gmusicbrowser
-    - refresh: True
-
-gmusicbrowser:
-  pkg:
-    - installed
-
-# VLC media player
-vlc-ppa:
-  pkgrepo.managed:
-    - ppa: videolan/stable-daily
-  pkg.latest:
-    - name: vlc
-    - refresh: True
-
-vlc:
-  pkg:
-    - installed
-
-
-# Skype
-skype: 
-  cmd.run:
-    - name: |
-      dpkg --add-architecture i386
-      add-apt-repository "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
-      apt-get update && apt-get install skype pulseaudio:i386
-    - unless: dpkg -s skype  
+include:
+  - basic
+  - chromium
+  - git
+  - atom
+  - sublime
+  - lamp
+  - gmusicbrowser
+  - vlc
+  - skype
