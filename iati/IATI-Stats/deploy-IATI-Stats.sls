@@ -21,7 +21,7 @@ stats-deps:
 # Branch name should probably be controlled by a grain
 https://github.com/IATI/IATI-Stats.git:
   git.latest:
-{% if saltenv == 'dev' %}
+{% if pillar['env'] == 'dev' %}
     - rev: master
 {% else %}
     - rev: live
@@ -34,6 +34,7 @@ https://github.com/IATI/IATI-Stats.git:
     virtualenv.managed:
         - system_site_packages: False
         - requirements: {{ pillar['stats']['unix-user-home-directory'] }}/IATI-Stats/requirements.txt
+        - no_chown: True
         - require:
             - pkg: stats-deps
 

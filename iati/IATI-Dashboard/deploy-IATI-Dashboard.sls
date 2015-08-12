@@ -9,12 +9,12 @@
 # Clone git repo
 https://github.com/IATI/IATI-Dashboard.git:
   git.latest:
-{% if saltenv == 'dev' %}
+{% if pillar['env'] == 'dev' %}
     - rev: master
 {% else %}
     - rev: live 
 {% endif %}
-    - target: {{ pillar['registry-refresher']['unix-user-home-directory'] }}
+    - target: {{ pillar['registry-refresher']['unix-user-home-directory'] }}/IATI-Dashboard
     - user: {{ pillar['registry-refresher']['unix-user-name'] }}
 
 # Install dependencies
@@ -30,12 +30,13 @@ dashboard-deps:
     virtualenv.managed:
         - system_site_packages: False
         - requirements: {{ pillar['registry-refresher']['unix-user-home-directory'] }}/IATI-Dashboard/requirements.txt
+        - no_chown: True
         - require:
             - pkg: stats-deps
             - pkg: dashboard-deps
 
 # Set-up jinja templating configutation file
-{{ pillar['registry-refresher']['unix-user-home-directory'] }}/config.py:
+{{ pillar['registry-refresher']['unix-user-home-directory'] }}/IATI-Dashboard/config.py:
     file.managed:
         - source: salt://iati/IATI-Dashboard/dashboard-config.py
         - user: dashboard

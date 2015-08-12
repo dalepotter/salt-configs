@@ -4,7 +4,7 @@ Europe/London:
 
 # Set-up SSH keys for the developers
 include:
-  - ssh-keys
+  - iati.ssh-keys
 
 # Set-up automatic updates
 basic-server-deps:
