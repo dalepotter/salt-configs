@@ -104,7 +104,7 @@ webserver-deps:
 # Server - Configure the apache public webserver
 /etc/apache2/sites-available/new.dashboard.conf:
   file.managed:
-    - source: salt://iati/IATI-Dashboard/dashboard-apache
+    - source: salt://iati/dashboard-apache
 
 # Server - Set-up a symlink between sites-enabled and sites-available directories
 /etc/apache2/sites-enabled/new.dashboard.conf:
