@@ -14,7 +14,7 @@ https://github.com/IATI/IATI-Dashboard.git:
 {% else %}
     - rev: live 
 {% endif %}
-    - target: {{ pillar['registry-refresher']['unix-user-home-directory'] }}
+    - target: {{ pillar['registry-refresher']['unix-user-home-directory'] }}/IATI-Dashboard
     - user: {{ pillar['registry-refresher']['unix-user-name'] }}
 
 # Install dependencies
