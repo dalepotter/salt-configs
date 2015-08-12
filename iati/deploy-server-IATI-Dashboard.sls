@@ -150,7 +150,7 @@ apache2:
 {% endif %}
 
 # Server
-{% if pillar['env'] == 'dev' %}
+{% if pillar['env'] == 'live' %}
 curl "http://iatiregistry.org/api/1/search/dataset?isopen=false&limit=200" | grep -o '"[^"]*"' | sed -e 's/"//g' -e 's/-.*//' | sort | uniq -c | gist -u 24beac7d23282f9b15f4 -f license_not_open:
   cron.present:
     - identifier: license-not-open-gist
