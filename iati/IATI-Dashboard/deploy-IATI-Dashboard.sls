@@ -35,7 +35,7 @@ dashboard-deps:
             - pkg: dashboard-deps
 
 # Set-up jinja templating configutation file
-{{ pillar['registry-refresher']['unix-user-home-directory'] }}/config.py:
+{{ pillar['registry-refresher']['unix-user-home-directory'] }}/IATI-Dashboard/config.py:
     file.managed:
         - source: salt://iati/IATI-Dashboard/dashboard-config.py
         - user: dashboard
