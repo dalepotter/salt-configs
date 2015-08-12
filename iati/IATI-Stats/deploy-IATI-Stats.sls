@@ -34,6 +34,7 @@ https://github.com/IATI/IATI-Stats.git:
     virtualenv.managed:
         - system_site_packages: False
         - requirements: {{ pillar['stats']['unix-user-home-directory'] }}/IATI-Stats/requirements.txt
+        - no_chown: True
         - require:
             - pkg: stats-deps
 

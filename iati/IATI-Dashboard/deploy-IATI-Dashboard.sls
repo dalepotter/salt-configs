@@ -30,6 +30,7 @@ dashboard-deps:
     virtualenv.managed:
         - system_site_packages: False
         - requirements: {{ pillar['registry-refresher']['unix-user-home-directory'] }}/IATI-Dashboard/requirements.txt
+        - no_chown: True
         - require:
             - pkg: stats-deps
             - pkg: dashboard-deps
