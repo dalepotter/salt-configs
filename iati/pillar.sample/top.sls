@@ -4,3 +4,4 @@ base:
     
   'IATI-Dummy2':
     - IATI-Dashboard
+    - env-dev

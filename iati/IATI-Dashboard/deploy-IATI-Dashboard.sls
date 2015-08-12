@@ -9,7 +9,7 @@
 # Clone git repo
 https://github.com/IATI/IATI-Dashboard.git:
   git.latest:
-{% if saltenv == 'dev' %}
+{% if pillar['env'] == 'dev' %}
     - rev: master
 {% else %}
     - rev: live 

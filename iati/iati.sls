@@ -1,9 +1,9 @@
 # @todo This file to be the top.sls file when IATI has it's own salt repo
-# For now, it can be run using: salt '*' state.sls iati.iati
+# For now, it can be run using: salt '*' state.top iati/iati.sls
 
 base:
   '*':
-    - basic
+    - iati.basic
 
   'IATI-Dummy2':
-    - deploy-server-IATI-Dashboard
+    - iati.deploy-server-IATI-Dashboard

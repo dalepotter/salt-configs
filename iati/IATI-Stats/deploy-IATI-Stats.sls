@@ -21,7 +21,7 @@ stats-deps:
 # Branch name should probably be controlled by a grain
 https://github.com/IATI/IATI-Stats.git:
   git.latest:
-{% if saltenv == 'dev' %}
+{% if pillar['env'] == 'dev' %}
     - rev: master
 {% else %}
     - rev: live

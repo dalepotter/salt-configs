@@ -12,10 +12,9 @@
 ###########################
 
 include:
-  - base
-  - IATI-Registry-Refresher.deploy-IATI-Registry-Refresher
-  - IATI-Stats.deploy-IATI-Stats
-  - IATI-Dashboard.deploy-IATI-Dashboard
+  - .IATI-Registry-Refresher.deploy-IATI-Registry-Refresher
+  - .IATI-Stats.deploy-IATI-Stats
+  - .IATI-Dashboard.deploy-IATI-Dashboard
 
 # Ensure there is a user 'dashboard'
 {{ pillar['dashboard']['unix-user-name'] }}:
@@ -144,14 +143,14 @@ apache2:
   cron.present:
     - user: {{ pillar['dashboard']['unix-user-name'] }}
     - minute: 1
-{% if saltenv == 'dev' %}
+{% if pillar['env'] == 'dev' %}
     - hour: 6
 {% else %}
     - hour: 0
 {% endif %}
 
 # Server
-{% if saltenv != 'dev' %}
+{% if pillar['env'] == 'dev' %}
 curl "http://iatiregistry.org/api/1/search/dataset?isopen=false&limit=200" | grep -o '"[^"]*"' | sed -e 's/"//g' -e 's/-.*//' | sort | uniq -c | gist -u 24beac7d23282f9b15f4 -f license_not_open:
   cron.present:
     - identifier: license-not-open-gist
