@@ -19,3 +19,11 @@ basic-server-deps:
 /etc/apt/apt.conf.d/10periodic:
   file.managed:
     - source: salt://iati/10periodic
+
+# Restart Cron on timezone change
+cron:
+  service.running:
+    - reload: True
+    - watch:
+#      - file: /etc/localtime 
+      - cmd: "/etc/localtime"

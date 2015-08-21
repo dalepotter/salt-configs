@@ -35,6 +35,7 @@ https://github.com/IATI/IATI-Stats.git:
         - system_site_packages: False
         - requirements: {{ pillar['stats']['unix-user-home-directory'] }}/IATI-Stats/requirements.txt
         - no_chown: True
+        - user: root
         - require:
             - pkg: stats-deps
 
