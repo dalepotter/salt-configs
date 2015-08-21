@@ -16,4 +16,6 @@ include:
   - lamp
   - gmusicbrowser
   - vlc
+  - filezilla
+  - transmission
   - skype
